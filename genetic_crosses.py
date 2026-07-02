@@ -3,8 +3,8 @@ import os
 
 # ŚCIEŻKI
 #   Wejściowe
-input_female = ".\\Data_samples\\"
-input_male = ".\\Data_samples\\"
+input_female = ".\\Data_samples\\pea_plant_female.txt"
+input_male = ".\\Data_samples\\pea_plant_male.txt"
 
 #   Wyjściowe
 results_dir = ".\\Results" #output_dir
@@ -69,6 +69,8 @@ genotype_male = prepare_genotype_file(raw_file_male)
 genotype_female = prepare_genotype_file(raw_file_female)
 
 
+
+
 # ZGODNOŚĆ CECH
 print("Sprawdzanie zgodności cech osobników...")
 
@@ -77,8 +79,7 @@ if compatibility:
     print("Cechy są zgodne dla obu osobników. Można generować potomstwo")
 else:
     print("Cechy nie są zgodne. Nie można wygenerować potomstwa.")
-
-
+    exit()
 
 
 
@@ -164,23 +165,31 @@ offspring_unique_count = count_offspring(offspring_all)
 
 
 # Podsumowanie
-print(f"Wygenerowano {len(offspring_all)} możliwych układów genotypowych potomstwa dla podanych osobników.")
-for genotype, count in offspring_unique_count.items():
-    print(f"Zgodnie z regułami Mendla, uzyskano następujące genot{}")
+print(f"Wygenerowano {len(offspring_all)} możliwych układów genotypowych potomstwa dla podanych osobników.\nZapisywanie wyników do osobnego pliku...")
     
     
 
 # PLIK WYNIKOWY
-def creating_results_file(all_offspring, unique_counts, output_dir):
-    file_path = os.path.join(output_dir, "Wyniki_krzyżowania_osobników.txt")
-    with open(results_path, 'w', encoding='utf-8') as file:
+def creating_results_file(all_offspring, unique_count, output_dir, input_female, input_male):
+    
+    name_female = os.path.splitext(os.path.basename(input_female))[0] # 0 - nazwa, 1 - rozsz
+    name_male = os.path.splitext(os.path.basename(input_male))[0]
+    
+    file_path = os.path.join(output_dir, f"Wyniki_krzyżowania_{name_female}_x_{name_male}.txt")
+    
+    with open(file_path, 'w', encoding='utf-8') as file:
         
         file.write("Wszystkie możliwe genotypy potomstwa:\n")
         for genotype in all_offspring:
             file.write(genotype + "\n")
         
-        file.write("\n Uzyskano następujące unikalne genotypy. W nawiasie podano liczbę wystąpień danego genotypu.")
-        for genotype, count in unique_counts.items():
+        file.write("\nUzyskano następujące unikalne genotypy. W nawiasie podano liczbę wystąpień danego genotypu.\n")
+        for genotype, count in unique_count.items():
             file.write(f"{genotype} ({count})\n")
             
     return file_path
+
+
+# Gotowy plik z wynikami
+results_file = creating_results_file(offspring_all, offspring_unique_count, results_dir, input_female, input_male)
+print(f"Wyniki zapisano w pliku: {results_file}")
