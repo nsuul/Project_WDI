@@ -4,7 +4,7 @@ import os
 # ŚCIEŻKI
 #   Wejściowe
 input_female = ".\\Data_samples\\pea_plant_female.txt"
-input_male = ".\\Data_samples\\pea_plant_male.txt"
+input_male = ".\\Data_samples\\human_male.txt"
 
 #   Wyjściowe
 results_dir = ".\\Results" #output_dir
@@ -48,10 +48,6 @@ def prepare_genotype_file(raw_file):
 ### Porównanie plików - czy cechy są zgodne
 def compare_genotypes(genotype1, genotype2):
     
-    if genotype1 is None or genotype2 is None: #walidacja wczytania plikow
-        print("Nie wczytano jednego z plików - nie można porównać genotypów.")
-        return False
-    
     # zbiory bez powtórzeń - eliminacja powtórzeń z drugiego allelu
     traits1 = set(char.upper() for char in genotype1)
     traits2 = set(char.upper() for char in genotype2)
@@ -68,7 +64,9 @@ raw_file_female = load_genotype_file(input_female)
 genotype_male = prepare_genotype_file(raw_file_male)
 genotype_female = prepare_genotype_file(raw_file_female)
 
-
+if genotype_male is None or genotype_female is None:
+    print("Nie można kontynuować. Wybierz poprawne pliki wejściowe.")
+    exit()
 
 
 # ZGODNOŚĆ CECH
