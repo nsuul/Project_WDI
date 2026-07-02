@@ -1,0 +1,85 @@
+Wszystkie możliwe genotypy potomstwa:
+AABBCC
+AABBCc
+AABBCc
+AABBcc
+AABbCC
+AABbCc
+AABbCc
+AABbcc
+AABbCC
+AABbCc
+AABbCc
+AABbcc
+AAbbCC
+AAbbCc
+AAbbCc
+AAbbcc
+AaBBCC
+AaBBCc
+AaBBCc
+AaBBcc
+AaBbCC
+AaBbCc
+AaBbCc
+AaBbcc
+AaBbCC
+AaBbCc
+AaBbCc
+AaBbcc
+AabbCC
+AabbCc
+AabbCc
+Aabbcc
+AABBCC
+AABBCc
+AABBCc
+AABBcc
+AABbCC
+AABbCc
+AABbCc
+AABbcc
+AABbCC
+AABbCc
+AABbCc
+AABbcc
+AAbbCC
+AAbbCc
+AAbbCc
+AAbbcc
+AaBBCC
+AaBBCc
+AaBBCc
+AaBBcc
+AaBbCC
+AaBbCc
+AaBbCc
+AaBbcc
+AaBbCC
+AaBbCc
+AaBbCc
+AaBbcc
+AabbCC
+AabbCc
+AabbCc
+Aabbcc
+
+Uzyskano następujące unikalne genotypy. W nawiasie podano liczbę wystąpień danego genotypu.
+AABBCC (2)
+AABBCc (4)
+AABBcc (2)
+AABbCC (4)
+AABbCc (8)
+AABbcc (4)
+AAbbCC (2)
+AAbbCc (4)
+AAbbcc (2)
+AaBBCC (2)
+AaBBCc (4)
+AaBBcc (2)
+AaBbCC (4)
+AaBbCc (8)
+AaBbcc (4)
+AabbCC (2)
+AabbCc (4)
+Aabbcc (2)
