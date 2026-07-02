@@ -1,6 +1,18 @@
+# ŚCIEŻKI
+#   Wejściowe
+input_female = ".\\Data_samples\\"
+input_male = ".\\Data_samples\\"
+
+#   Wyjściowe
+results_path = ".\\Results"
+
+
+
 # PRZYGOTOWANIE PLIKÓW
 
 ### Wczytanie pliku
+print("Wczytywanie plików...")
+
 def load_genotype_file(path):
     try:
         with open(path, 'r', encoding='utf-8') as file:
@@ -44,9 +56,10 @@ def compare_genotypes(genotype1, genotype2):
     return traits1 == traits2 #jesli True to sa zgodne
 
 
-# Ścieżki inputów
-raw_file_male = load_genotype_file("")
-raw_file_female = load_genotype_file("")
+# Załadowanie inputów
+raw_file_male = load_genotype_file(input_male)
+raw_file_female = load_genotype_file(input_female)
+
 
 # Gotowe genotypy
 genotype_male = prepare_genotype_file(raw_file_male)
@@ -54,6 +67,8 @@ genotype_female = prepare_genotype_file(raw_file_female)
 
 
 # ZGODNOŚĆ CECH
+print("Sprawdzanie zgodności cech osobników...")
+
 compatibility = compare_genotypes(genotype_female, genotype_male)
 if compatibility:
     print("Cechy są zgodne dla obu osobników. Można generować potomstwo")
@@ -61,9 +76,15 @@ else:
     print("Cechy nie są zgodne. Nie można wygenerować potomstwa.")
 
 
+
+
+
+
 # KRZYŻÓWKI
 
-# Rozdzielenie string na pary alleli
+### Rozdzielenie string na pary alleli
+print("Krzyżowanie osobników...")
+
 def splitting_traits(genotype):
     traits_list = []
     
@@ -74,8 +95,8 @@ def splitting_traits(genotype):
     return traits_list
     
 
-# Krzyżowanie w obrębie jednej cechy
-#    Wynik: 4 kombinacje
+### Krzyżowanie w obrębie jednej cechy
+#      Wynik: 4 kombinacje
 def cross_single_trait(pair1, pair2):
     crossed_trait = []
     
@@ -88,7 +109,7 @@ def cross_single_trait(pair1, pair2):
     return crossed_trait
 
 
-# Połączenie krzyżowania wielu cech - pełne genotypy potomstwa
+### Połączenie krzyżowania wielu cech - pełne genotypy potomstwa
 def combine_traits(traits_crossing_result_list):
     combined = [""] # pusty string - genotyp do którego dopisujemy cechy
     
@@ -105,21 +126,42 @@ def combine_traits(traits_crossing_result_list):
     return combined
 
 
-# Zliczanie genotypów - do opcji bez powtórzeń
+### Zliczanie genotypów - do opcji bez powtórzeń
 def count_offspring(all_offspring):
-    counts = {}
+    count = {}
     
     for genotype in all_offspring:
-        if genotype in counts:
-            counts[genotype] += 1
+        if genotype in count:
+            count[genotype] += 1
         else:
-            counts[genotype] = 1 #nowe pojawienie w słowniku, wartość startowa zliczeń=1
+            count[genotype] = 1 #nowe pojawienie w słowniku, wartość startowa zliczeń=1
                 
         
 
+# Gotowe listy rozdzielonych cech - 1 element to 1 cecha
+#   Wynik: [Aa, Bb]    
+traits_male = splitting_traits(genotype_male)
+traits_female = splitting_traits(genotype_female)
 
-
+# Gotowe krzyżówki dla 1 cechy
+#   Wynik: [[Aa, Aa, AA, aa], [Bb, Bb, bb, BB]] - lista list
+trait_crosses = []
+for t in range(len(traits_female)): #dla każdej cechy w liście cech
+    single_cross = cross_single_trait(traits_female[i], traits_male[i]) #po cesze od matki i ojca
+    trait_crosses.append(single_cross)
 
     
-traits_list_male = splitting_traits(genotype_male)
-traits_list_female = splitting_traits(genotype_female)
+# Łączenie
+offspring_all = combine_traits(trait_crosses)
+
+# Zliczanie uniklanych
+offspring_unique_count = count_offspring(offspring_all)
+
+
+# Podsumowanie
+print(f"Wygenerowano {len(offspring_all)} możliwych układów genotypowych potomstwa dla podanych osobników.")
+for genotype, count in offspring_unique_count.items():
+    print(f"Zgodnie z regułami Mendla, uzyskano następujące genot{}")
+    
+    
+
