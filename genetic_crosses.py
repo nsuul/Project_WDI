@@ -1,10 +1,13 @@
+import os 
+
+
 # ŚCIEŻKI
 #   Wejściowe
 input_female = ".\\Data_samples\\"
 input_male = ".\\Data_samples\\"
 
 #   Wyjściowe
-results_path = ".\\Results"
+results_dir = ".\\Results" #output_dir
 
 
 
@@ -135,6 +138,8 @@ def count_offspring(all_offspring):
             count[genotype] += 1
         else:
             count[genotype] = 1 #nowe pojawienie w słowniku, wartość startowa zliczeń=1
+    
+    return count
                 
         
 
@@ -147,7 +152,7 @@ traits_female = splitting_traits(genotype_female)
 #   Wynik: [[Aa, Aa, AA, aa], [Bb, Bb, bb, BB]] - lista list
 trait_crosses = []
 for t in range(len(traits_female)): #dla każdej cechy w liście cech
-    single_cross = cross_single_trait(traits_female[i], traits_male[i]) #po cesze od matki i ojca
+    single_cross = cross_single_trait(traits_female[t], traits_male[t]) #po cesze od matki i ojca
     trait_crosses.append(single_cross)
 
     
@@ -165,3 +170,17 @@ for genotype, count in offspring_unique_count.items():
     
     
 
+# PLIK WYNIKOWY
+def creating_results_file(all_offspring, unique_counts, output_dir):
+    file_path = os.path.join(output_dir, "Wyniki_krzyżowania_osobników.txt")
+    with open(results_path, 'w', encoding='utf-8') as file:
+        
+        file.write("Wszystkie możliwe genotypy potomstwa:\n")
+        for genotype in all_offspring:
+            file.write(genotype + "\n")
+        
+        file.write("\n Uzyskano następujące unikalne genotypy. W nawiasie podano liczbę wystąpień danego genotypu.")
+        for genotype, count in unique_counts.items():
+            file.write(f"{genotype} ({count})\n")
+            
+    return file_path
