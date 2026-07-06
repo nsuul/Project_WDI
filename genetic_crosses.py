@@ -1,17 +1,15 @@
 import os 
 
-
 # ŚCIEŻKI
 #   Wejściowe
-input_female = ".\\Data_samples\\pea_plant_female.txt"
-input_male = ".\\Data_samples\\human_male.txt"
+input_female = ".\\Data_samples\\"
+input_male = ".\\Data_samples\\"
 
 #   Wyjściowe
 results_dir = ".\\Results" #output_dir
 
 
-
-# PRZYGOTOWANIE PLIKÓW
+### INSTRUKCJE
 
 ### Wczytanie pliku
 print("Wczytywanie plików...")
@@ -55,38 +53,7 @@ def compare_genotypes(genotype1, genotype2):
     return traits1 == traits2 #jesli True to sa zgodne
 
 
-# Załadowanie inputów
-raw_file_male = load_genotype_file(input_male)
-raw_file_female = load_genotype_file(input_female)
-
-
-# Gotowe genotypy
-genotype_male = prepare_genotype_file(raw_file_male)
-genotype_female = prepare_genotype_file(raw_file_female)
-
-if genotype_male is None or genotype_female is None:
-    print("Nie można kontynuować. Wybierz poprawne pliki wejściowe.")
-    exit()
-
-
-# ZGODNOŚĆ CECH
-print("Sprawdzanie zgodności cech osobników...")
-
-compatibility = compare_genotypes(genotype_female, genotype_male)
-if compatibility:
-    print("Cechy są zgodne dla obu osobników. Można generować potomstwo")
-else:
-    print("Cechy nie są zgodne. Nie można wygenerować potomstwa.")
-    exit()
-
-
-
-
-# KRZYŻÓWKI
-
-### Rozdzielenie string na pary alleli
-print("Krzyżowanie osobników...")
-
+### Krzyżówki
 def splitting_traits(genotype):
     traits_list = []
     
@@ -140,34 +107,8 @@ def count_offspring(all_offspring):
     
     return count
                 
-        
 
-# Gotowe listy rozdzielonych cech - 1 element to 1 cecha
-#   Wynik: [Aa, Bb]    
-traits_male = splitting_traits(genotype_male)
-traits_female = splitting_traits(genotype_female)
-
-# Gotowe krzyżówki dla 1 cechy
-#   Wynik: [[Aa, Aa, AA, aa], [Bb, Bb, bb, BB]] - lista list
-trait_crosses = []
-for t in range(len(traits_female)): #dla każdej cechy w liście cech
-    single_cross = cross_single_trait(traits_female[t], traits_male[t]) #po cesze od matki i ojca
-    trait_crosses.append(single_cross)
-
-    
-# Łączenie
-offspring_all = combine_traits(trait_crosses)
-
-# Zliczanie uniklanych
-offspring_unique_count = count_offspring(offspring_all)
-
-
-# Podsumowanie
-print(f"Wygenerowano {len(offspring_all)} możliwych układów genotypowych potomstwa dla podanych osobników.\nZapisywanie wyników do osobnego pliku...")
-    
-    
-
-# PLIK WYNIKOWY
+### Plik wynikowy
 def creating_results_file(all_offspring, unique_count, output_dir, input_female, input_male):
     
     name_female = os.path.splitext(os.path.basename(input_female))[0] # 0 - nazwa, 1 - rozsz
@@ -186,6 +127,61 @@ def creating_results_file(all_offspring, unique_count, output_dir, input_female,
             file.write(f"{genotype} ({count})\n")
             
     return file_path
+
+
+
+
+
+
+# Załadowanie inputów
+raw_file_male = load_genotype_file(input_male)
+raw_file_female = load_genotype_file(input_female)
+
+
+# Gotowe genotypy
+genotype_male = prepare_genotype_file(raw_file_male)
+genotype_female = prepare_genotype_file(raw_file_female)
+
+if genotype_male is None or genotype_female is None:
+    print("Nie można kontynuować. Wybierz poprawne pliki wejściowe.")
+    exit()
+
+
+# ZGODNOŚĆ CECH
+print("Sprawdzanie zgodności cech osobników...")
+
+compatibility = compare_genotypes(genotype_female, genotype_male)
+if compatibility:
+    print("Cechy są zgodne dla obu osobników. Można generować potomstwo")
+else:
+    print("Cechy nie są zgodne. Nie można wygenerować potomstwa.")
+    exit()
+
+
+# KRZYŻÓWKI
+
+print("Krzyżowanie osobników...")
+
+# Gotowe listy rozdzielonych cech - 1 element to 1 cecha
+#   Wynik: [Aa, Bb]    
+traits_male = splitting_traits(genotype_male)
+traits_female = splitting_traits(genotype_female)
+
+# Gotowe krzyżówki dla 1 cechy
+#   Wynik: [[Aa, Aa, AA, aa], [Bb, Bb, bb, BB]] - lista list
+trait_crosses = []
+for t in range(len(traits_female)): #dla każdej cechy w liście cech
+    single_cross = cross_single_trait(traits_female[t], traits_male[t]) #po cesze od matki i ojca
+    trait_crosses.append(single_cross)
+    
+# Łączenie
+offspring_all = combine_traits(trait_crosses)
+
+# Zliczanie uniklanych
+offspring_unique_count = count_offspring(offspring_all)
+
+# Podsumowanie
+print(f"Wygenerowano {len(offspring_all)} możliwych układów genotypowych potomstwa dla podanych osobników.\nZapisywanie wyników do osobnego pliku...")
 
 
 # Gotowy plik z wynikami
